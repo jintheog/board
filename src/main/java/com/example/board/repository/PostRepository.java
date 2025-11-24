@@ -35,7 +35,24 @@ public class PostRepository {
     public void delete(Post post) {
         em.remove(post);
     }
+    // 1. 비영속 (id가 아직 부여되지 않음. db에 저장이 되지 않음)
+    // new Post("title", "content");
 
+    // => persist()
+
+    // 2. 영속 (id가 부여됨)
+    // em.persist(post);
+    // => detach(), clear()
+    
+    
+    
+    // 3. 준영속 (detached 영속성 컨텐츠에서 분리 됬다. 수정 하는 중)
+    // em.detach(post)
+    // => merge() => 영속으로 돌아감
+
+
+    // 4. 삭제
+    // em.remove(post)
 }
 
 
