@@ -1,7 +1,9 @@
 package com.example.board.controller;
 
 import com.example.board.dto.PostDTO;
+import com.example.board.entity.Post;
 import com.example.board.repository.PostRepository;
+import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController {
+    private final PostService postService;
     private final PostRepository postRepository;
 
 //    public PostController(PostRepository postRepository) { //롬복으로 자동생성
@@ -19,13 +22,13 @@ public class PostController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("posts", postRepository.findAll());
+        model.addAttribute("posts", postService.getAllPosts());
         return "posts/list";
     }
 
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        PostDTO post = postRepository.findById(id);
+        Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         return "posts/detail";
     }
@@ -37,14 +40,14 @@ public class PostController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute PostDTO postDTO) {
-        postRepository.save(postDTO);
+    public String create(@ModelAttribute Post post) {
+        postService.createPost(post);
         return "redirect:/posts";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        PostDTO post = postRepository.findById(id);
+        Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         return "posts/form";
     }
@@ -52,17 +55,17 @@ public class PostController {
     @PostMapping("/{id}")
     public String update(
         @PathVariable Long id,
-        @ModelAttribute PostDTO postDTO
+        @ModelAttribute Post post
     ){
 
-        postRepository.update(id, postDTO);
+        postService.updatePost(id, post);
 
         return "redirect:/posts/" + id;
     }
 
-    @PostMapping("/id/delete")
+    @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id){
-        postRepository.delete(id);
+        postService.deletePost(id);
         return "redirect:/posts";
     }
 
