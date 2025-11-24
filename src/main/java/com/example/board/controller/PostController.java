@@ -93,7 +93,7 @@ public class PostController {
     public String search(@RequestParam String keyword, Model model) {
         List<Post> posts = postService.searchPost(keyword);
         model.addAttribute("posts", posts);
-        return "posts/search";
+        return "posts/list";
     }
 
 }
