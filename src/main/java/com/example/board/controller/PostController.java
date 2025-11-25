@@ -96,4 +96,8 @@ public class PostController {
         return "posts/list";
     }
 
+    // 최근 게시물 3개만 출력
+    // /posts/recent
+
+
 }
