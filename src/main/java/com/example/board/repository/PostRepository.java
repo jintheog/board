@@ -1,136 +1,29 @@
 package com.example.board.repository;
 
+import java.util.List;
 import com.example.board.entity.Post;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public class PostRepository {
+public interface PostRepository extends JpaRepository<Post, Long> {
+    // 기본 CRUD 메서드
 
-    @PersistenceContext
-    private EntityManager em;
+    // 저장 (INSERT or UPDATE)
+    // Post save(Post entity);
 
-    public Post save(Post post) {
-        em.persist(post);
-        return post;
-    }
+    // 조회
+    // Optional<Post> findById();
+    // List<Post> findAll();
+    // List<Post> findAll(Sort sort);
 
-    public Post findById(Long id) {
-        return em.find(Post.class, id);
-    }
-
-    public List<Post> findAll() {
-        // EM => 단일 엔티티 조작만 기본 제공
-        String jpql = "SELECT p FROM Post p";
-        return em.createQuery(jpql, Post.class).getResultList();
-    }
-
-    public Post update(Post post) {
-        return em.merge(post);
-    }
-
-    public void delete(Post post) {
-        em.remove(post);
-    }
-
-    public List<Post> findByTitleContaining(String keyword) {
-        String jpql = "SELECT p FROM Post p WHERE p.title LIKE :keyword";
-        return em.createQuery(jpql, Post.class)
-                .setParameter("keyword", "%"+keyword+"%")
-                .getResultList();
-    }
-    // 1. 비영속 (id가 아직 부여되지 않음. db에 저장이 되지 않음)
-    // new Post("title", "content");
-
-    // => persist()
-
-    // 2. 영속 (id가 부여됨)
-    // em.persist(post);
-    // => detach(), clear()
+    // 삭제
+    // void deleteById(Long id);
+    // void delete(Post entity)
     
-    
-    
-    // 3. 준영속 (detached 영속성 컨텐츠에서 분리 됬다. 수정 하는 중)
-    // em.detach(post)
-    // => merge() => 영속으로 돌아감
-
-
-    // 4. 삭제
-    // em.remove(post)
+    // 개수 조회
+    // long count();
+    // 존재 여부 확인
+    // boolean existsById(Long id)
+    List<Post> findByTitleContaining(String keyword);
 }
-
-
-
-
-
-
-
-
-
-
-
-//package com.example.board.repository;
-//
-//import com.example.board.dto.PostDTO;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.jdbc.core.RowMapper;
-//import org.springframework.stereotype.Repository;
-//
-//import java.util.List;
-//
-//@Repository
-//@RequiredArgsConstructor
-//public class PostRepository {s
-//
-//    private final JdbcTemplate jdbcTemplate;
-//
-//    // ↓ 아래 생성자는 @RequiredArgsConstructor로 자동생성
-////    public PostRepository(JdbcTemplate jdbcTemplate) {
-////        this.jdbcTemplate = jdbcTemplate;
-////    }
-//
-//    private final RowMapper<PostDTO> rowMapper = (rs, rowNum) -> {
-//        return new PostDTO(
-//                rs.getLong("id"),
-//                rs.getString("title"),
-//                rs.getString("content"),
-//                rs.getTimestamp("created_at").toLocalDateTime()
-//        );
-//    };
-//
-//    //전체 조회
-//    public List<PostDTO> findAll() {
-//        String sql= "SELECT * FROM post";
-//        return jdbcTemplate.query(sql, rowMapper);
-//    }
-//
-//    //상세 조회
-//    public PostDTO findById(Long id) {
-//        String sql= "SELECT * FROM post WHERE id = ?";
-//
-//        // queryForObject => 단일 행 조회
-//        PostDTO post = jdbcTemplate.queryForObject(sql, rowMapper, id);
-//
-//        return post;
-//    }
-//
-//    public void save(PostDTO postDTO) {
-//        String sql = "INSERT INTO post (title, content) VALUES (?, ?)";
-//        jdbcTemplate.update(sql, postDTO.getTitle(), postDTO.getContent());
-//    }
-//
-//    public void update(Long id, PostDTO postDTO) {
-//        String sql = "UPDATE post SET title = ?, content = ? WHERE id = ?";
-//        jdbcTemplate.update(sql, postDTO.getTitle(), postDTO.getContent(), id);
-//    }
-//
-//    public void delete(Long id){
-//        String sql = "DELETE FROM post WHERE id = ?";
-//        jdbcTemplate.update(sql, id);
-//    }
-//
-//}
