@@ -88,8 +88,12 @@ public class PostService {
         System.out.println("change title");
     }
 
-    public List<Post> searchPost(String keyword) {
+    public List<Post> searchPosts(String keyword) {
         return postRepository.findByTitleContaining(keyword);
+    }
+
+    public List<Post> searchPostsByTitleOrContent(String keyword) {
+        return  postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
     }
 
 }

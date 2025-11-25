@@ -40,5 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // ORDER BY id DESC
     List<Post> findAllByOrderByIdDesc(); //함수의 이름만 잘 설정을 해 주면 됨
 
+    // 제목 or 내용으로 검색
+    List<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 
 }
