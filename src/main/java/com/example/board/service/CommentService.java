@@ -22,7 +22,6 @@ public class CommentService {
         Post post = postService.getPostById(postId);
         comment.setPost(post);
         return commentRepository.save(comment);
-
     }
 
     @Transactional
