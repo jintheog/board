@@ -31,4 +31,11 @@ public class CommentService {
 
     }
 
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow();
+        commentRepository.delete(comment);
+    }
+
 }

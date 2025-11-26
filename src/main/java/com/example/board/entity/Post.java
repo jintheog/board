@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="post")
@@ -27,6 +28,9 @@ public class Post {
     @Column(name = "created_at", updatable = false  )
     private LocalDateTime createdAt;
 
+    @OneToMany
+    private List<Comment> comments;
+
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
@@ -37,6 +41,7 @@ public class Post {
     public void prePersist(){
         this.createdAt = LocalDateTime.now();
     }
+
 
 
 
