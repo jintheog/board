@@ -126,4 +126,13 @@ public class PostService {
     public Slice<Post> getPostsSlice(Pageable pageable) {
         return postRepository.findAllBy(pageable);
     }
+
+    public List<Post> getAllPostsWithFetchJoin() {
+//        return postRepository.findAll();
+        return postRepository.findAllWithComments();
+    }
+
+    public List<Post> getAllPostsWithEntityGraph() {
+        return postRepository.findAllWithCommentsEntityGraph();
+    }
 }
