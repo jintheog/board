@@ -20,8 +20,18 @@ public class CommentService {
     @Transactional
     public Comment createComment(Long postId, Comment comment) {
         Post post = postService.getPostById(postId);
-        comment.setPost(post);
-        return commentRepository.save(comment);
+
+        System.out.println("==== 댓글 추가전====");
+        System.out.println("댓글 수 : " + post.getComments().size());
+
+//        comment.setPost(post);
+        post.addComment(comment);
+        Comment saved = commentRepository.save(comment);
+
+        System.out.println("==== 댓글 추가후 ====");
+        System.out.println("댓글 수 : " + post.getComments().size());
+
+        return saved;
     }
 
     @Transactional
@@ -34,6 +44,12 @@ public class CommentService {
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow();
+
+        // 고아 객체 삭제
+//        Post post = comment.getPost();
+//        post.removeComment(comment);
+
+
         commentRepository.delete(comment);
     }
 

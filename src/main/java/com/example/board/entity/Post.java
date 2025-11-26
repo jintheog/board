@@ -29,7 +29,10 @@ public class Post {
     @Column(name = "created_at", updatable = false  )
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
     private List<Comment> comments = new ArrayList<>();
 
     public Post(String title, String content) {
@@ -43,7 +46,6 @@ public class Post {
         this.createdAt = LocalDateTime.now();
     }
 
-    
     //연관 관계 편의 메서드
     public void addComment(Comment comment) {
         comments.add(comment);
